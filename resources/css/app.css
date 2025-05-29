@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Added neon accent custom properties */
+:root {
+    --neon-pink: #ff0080;
+    --neon-cyan: #00ffff;
+    --neon-green: #39ff14;
+    --neon-purple: #8a2be2;
+}
