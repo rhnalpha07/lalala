@@ -21,8 +21,7 @@ class HomeController extends Controller
             ->take(6)
             ->get();
             
-        $featuredArtists = Artist::whereHas('events')
-            ->inRandomOrder()
+        $featuredArtists = Artist::inRandomOrder()
             ->take(3)
             ->get();
             

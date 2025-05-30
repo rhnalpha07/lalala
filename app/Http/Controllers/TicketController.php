@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -126,7 +127,7 @@ class TicketController extends Controller
 
         // For development purposes, we'll create a dummy transaction
         $transaction = $ticket->transaction()->create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'transaction_number' => 'TRX-' . uniqid(),
             'amount' => $ticket->price,
             'payment_method' => 'dummy',

@@ -66,7 +66,13 @@
                         <div class="md:col-span-2">
                             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">About This Event</h2>
                             <div class="prose max-w-none dark:prose-invert mb-8">
-                                {!! $event->description ?? '<p class="text-gray-500 dark:text-gray-400 italic">No description available.</p>' !!}
+                                @if($event->description)
+                                    <div class="text-gray-800 dark:text-gray-200">
+                                        {!! $event->description !!}
+                                    </div>
+                                @else
+                                    <p class="text-gray-500 dark:text-gray-400 italic">No description available.</p>
+                                @endif
                             </div>
                             
                             <!-- Featuring Artists -->
@@ -79,7 +85,7 @@
                                                 class="w-full h-full object-cover">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400 dark:text-gray-300">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" />
                                                 </svg>
                                             </div>
@@ -136,10 +142,20 @@
                                                 </span>
                                             </div>
                                             
-                                            <a href="{{ route('tickets.index', ['event_id' => $event->id]) }}" 
-                                               class="block w-full text-center px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
-                                                Buy Tickets
-                                            </a>
+                                            @auth
+                                                <form action="{{ route('tickets.index') }}" method="GET">
+                                                    <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                                    <button type="submit" 
+                                                       class="block w-full text-center px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                                                        Buy Tickets
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('login') }}" 
+                                                   class="block w-full text-center px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                                                   Log in to Buy Tickets
+                                                </a>
+                                            @endauth
                                         @else
                                             <div class="flex items-center text-sm">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -19,7 +19,8 @@ class EventController extends Controller
     public function create()
     {
         $artists = Artist::all();
-        return view('admin.events.create', compact('artists'));
+        $event = new Event(); // Create empty event model for the form
+        return view('admin.events.create', compact('artists', 'event'));
     }
 
     public function store(Request $request)
@@ -42,7 +43,18 @@ class EventController extends Controller
             $validated['image'] = $path;
         }
 
-        Event::create($validated);
+        $event = Event::create($validated);
+        
+        // Create tickets for the event
+        for ($i = 1; $i <= $event->total_seats; $i++) {
+            $event->tickets()->create([
+                'ticket_number' => 'TIX-' . uniqid(),
+                'status' => 'available',
+                'seat_number' => 'SEAT-' . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'price' => $event->price,
+                'ticket_type' => 'regular'
+            ]);
+        }
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Event created successfully.');

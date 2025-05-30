@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminIndexController;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -17,7 +18,16 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';
+    public const HOME = '/';
+
+    /**
+     * The path to the "admin home" route for your application.
+     *
+     * This is used by Laravel authentication to redirect admin users after login.
+     *
+     * @var string
+     */
+    public const ADMIN_HOME = '/admin/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -29,12 +39,18 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
+            // 1. Register web routes (but not admin specific ones)
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
+                
+            // 2. Register admin routes with proper prefixing to avoid conflicts
+            Route::middleware('web')
+                ->group(base_path('routes/admin.php'));
+                
+            // 3. Register API routes
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
-
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
         });
     }
 } 

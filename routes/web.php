@@ -7,10 +7,8 @@ use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\EventController as AdminEventController;
-use App\Http\Controllers\Admin\ArtistController as AdminArtistController;
-use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\Admin\AdminIndexController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +21,12 @@ use App\Http\Middleware\AdminMiddleware;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// PRIORITAS: Rute utama untuk admin - ini akan menangani /admin dan memprioritaskannya 
+// karena routes/web.php dimuat sebelum routes/admin.php di RouteServiceProvider
+Route::get('/admin', [AdminIndexController::class, 'index']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// Rute untuk homepage
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -44,30 +43,36 @@ Route::get('/events/{event}', [EventController::class, 'show'])->name('events.sh
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
-    // Artist management
-    Route::resource('artists', ArtistController::class)->except(['index', 'show']);
-    
-    // Event management
-    Route::resource('events', EventController::class)->except(['index', 'show']);
-    
-    // Ticket management
-    Route::resource('tickets', TicketController::class);
+    // Ticket viewing and purchasing (for all logged-in users)
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
     Route::post('/tickets/{ticket}/purchase', [TicketController::class, 'purchase'])->name('tickets.purchase');
     
-    // Transaction management
-    Route::resource('transactions', TransactionController::class)->only(['index', 'show', 'create', 'store']);
+    // Transaction viewing (for all logged-in users)
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
     Route::get('/my-transactions', [TransactionController::class, 'userTransactions'])->name('transactions.user');
-});
-
-// Admin routes
-Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     
-    // Events Management
-    Route::resource('events', AdminEventController::class);
-    
-    // Artists Management
-    Route::resource('artists', AdminArtistController::class);
+    // Admin only routes
+    Route::middleware(['admin'])->group(function () {
+        // Artist management (admin only)
+        Route::resource('artists', ArtistController::class)->except(['index', 'show']);
+        
+        // Event management (admin only)
+        Route::resource('events', EventController::class)->except(['index', 'show']);
+        
+        // Ticket management (admin only)
+        Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+        Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
+        Route::get('/tickets/{ticket}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
+        Route::put('/tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
+        Route::patch('/tickets/{ticket}', [TicketController::class, 'update']);
+        Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+        
+        // Transaction management (admin only)
+        Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
+        Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+    });
 });
 
 require __DIR__.'/auth.php';
