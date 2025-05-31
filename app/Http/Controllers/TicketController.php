@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\Event;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,8 +30,12 @@ class TicketController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Eager load event relationship to avoid N+1 query issues
         $tickets = $query->with(['event', 'event.artist'])->latest()->paginate(10);
-        $events = Event::orderBy('event_date', 'desc')->get();
+        
+        // Get all events that have at least one ticket
+        $eventIds = Ticket::distinct()->pluck('event_id');
+        $events = Event::whereIn('id', $eventIds)->orderBy('event_date', 'desc')->get();
         
         return view('tickets.index', compact('tickets', 'events'));
     }
@@ -143,5 +148,20 @@ class TicketController extends Controller
 
         return redirect()->route('tickets.show', $ticket)
             ->with('success', 'Ticket purchased successfully.');
+    }
+    
+    /**
+     * Display tickets purchased by the logged-in user
+     */
+    public function userTickets(Request $request)
+    {
+        // Get transactions for the current user where payment is completed
+        $transactions = Transaction::where('user_id', Auth::id())
+            ->where('payment_status', 'completed')
+            ->with(['ticket', 'ticket.event', 'ticket.event.artist'])
+            ->latest()
+            ->paginate(10);
+            
+        return view('tickets.user-tickets', compact('transactions'));
     }
 }

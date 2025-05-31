@@ -89,7 +89,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                         @if($transaction->ticket && $transaction->ticket->event)
-                                            <a href="{{ route('events.show', $transaction->ticket->event) }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">
+                                            <a href="{{ route('events.show', ['event' => $transaction->ticket->event->id]) }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">
                                                 {{ $transaction->ticket->event->name }}
                                             </a>
                                         @else

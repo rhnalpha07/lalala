@@ -69,16 +69,22 @@
                              x-transition:leave-end="opacity-0 transform scale-95"
                              class="absolute right-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl shadow-lg border border-white/10"
                              style="display: none;">
+                            <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10">
+                                My Profile
+                            </a>
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10">
-                                Profile
+                                Edit Profile
                             </a>
                             @if (Auth::user()->is_admin)
                                 <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10">
                                     Admin Dashboard
                                 </a>
                             @endif
-                            <a href="{{ route('tickets.index') }}" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10">
+                            <a href="{{ route('tickets.user') }}" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10">
                                 My Tickets
+                            </a>
+                            <a href="{{ route('transactions.user') }}" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10">
+                                My Transactions
                             </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -152,16 +158,22 @@
             @else
                 <div class="border-t border-white/10 pt-2 mt-2">
                     <div class="px-3 py-2 text-white font-medium">{{ Auth::user()->name }}</div>
+                    <a href="{{ route('profile.show') }}" class="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-md text-base font-medium">
+                        My Profile
+                    </a>
                     <a href="{{ route('profile.edit') }}" class="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-md text-base font-medium">
-                        Profile
+                        Edit Profile
                     </a>
                     @if (Auth::user()->is_admin)
                         <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-md text-base font-medium">
                             Admin Dashboard
                         </a>
                     @endif
-                    <a href="{{ route('tickets.index') }}" class="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-md text-base font-medium">
+                    <a href="{{ route('tickets.user') }}" class="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-md text-base font-medium">
                         My Tickets
+                    </a>
+                    <a href="{{ route('transactions.user') }}" class="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-md text-base font-medium">
+                        My Transactions
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

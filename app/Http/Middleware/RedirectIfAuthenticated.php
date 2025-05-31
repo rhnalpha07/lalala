@@ -21,14 +21,12 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                // Check if this is an admin guard and request is for admin section
+                // Admin guard - always redirect to admin dashboard
                 if ($guard === 'admin') {
-                    // Only redirect admin if trying to access login/register pages
-                    if ($request->is('admin/login') || $request->is('admin/register')) {
-                        return redirect(RouteServiceProvider::ADMIN_HOME);
-                    }
-                } else {
-                    // For regular users
+                    return redirect(RouteServiceProvider::ADMIN_HOME);
+                } 
+                // Regular users - redirect to home
+                else {
                     return redirect(RouteServiceProvider::HOME);
                 }
             }

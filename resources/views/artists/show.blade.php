@@ -4,7 +4,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative">
                     <!-- Cover Image or Gradient Background -->
-                    <div class="h-64 bg-gradient-to-r from-pink-600 to-purple-700 w-full"></div>
+                    <div class="h-64 bg-gradient-to-r from-pink-600 to-purple-700 w-full" style="background-image: linear-gradient(to right, {{ $artist->gradient_start_color ?? '#e11d48' }}, {{ $artist->gradient_end_color ?? '#7e22ce' }});"></div>
                     
                     <!-- Artist Image and Basic Info -->
                     <div class="px-6 -mt-20">
@@ -68,11 +68,12 @@
                 <div class="p-6 border-t border-gray-200 dark:border-gray-700">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Upcoming Events</h2>
                     
-                    @if($artist->events->where('event_date', '>=', now())->count() > 0)
+                    @if($artist->events && $artist->events->where('event_date', '>=', now())->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach($artist->events->where('event_date', '>=', now()) as $event)
+                                @if($event)
                                 <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-                                    <a href="{{ route('events.show', $event) }}" class="block">
+                                    <a href="{{ route('events.show', ['event' => $event->id]) }}" class="block">
                                         <div class="p-6">
                                             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ $event->name }}</h3>
                                             <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -101,6 +102,7 @@
                                         </div>
                                     </a>
                                 </div>
+                                @endif
                             @endforeach
                         </div>
                     @else
@@ -118,11 +120,12 @@
                 <div class="p-6 border-t border-gray-200 dark:border-gray-700">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Past Events</h2>
                     
-                    @if($artist->events->where('event_date', '<', now())->count() > 0)
+                    @if($artist->events && $artist->events->where('event_date', '<', now())->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach($artist->events->where('event_date', '<', now()) as $event)
+                                @if($event)
                                 <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 opacity-75">
-                                    <a href="{{ route('events.show', $event) }}" class="block">
+                                    <a href="{{ route('events.show', ['event' => $event->id]) }}" class="block">
                                         <div class="p-6">
                                             <div class="flex justify-between items-start mb-2">
                                                 <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ $event->name }}</h3>
@@ -148,6 +151,7 @@
                                         </div>
                                     </a>
                                 </div>
+                                @endif
                             @endforeach
                         </div>
                     @else

@@ -13,7 +13,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -45,6 +45,43 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div>
+            <x-input-label for="phone_number" :value="__('Phone Number')" />
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
+        </div>
+
+        <div>
+            <x-input-label for="address" :value="__('Address')" />
+            <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $user->address)" />
+            <x-input-error class="mt-2" :messages="$errors->get('address')" />
+        </div>
+
+        <div>
+            <x-input-label for="birth_date" :value="__('Birth Date')" />
+            <x-text-input id="birth_date" name="birth_date" type="date" class="mt-1 block w-full" :value="old('birth_date', $user->birth_date)" />
+            <x-input-error class="mt-2" :messages="$errors->get('birth_date')" />
+        </div>
+
+        <div>
+            <x-input-label for="bio" :value="__('Bio')" />
+            <textarea id="bio" name="bio" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('bio', $user->bio) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+        </div>
+
+        <div>
+            <x-input-label for="profile_picture" :value="__('Profile Picture')" />
+            
+            @if($user->profile_picture)
+                <div class="mt-2 mb-2">
+                    <img src="{{ Storage::url($user->profile_picture) }}" alt="Profile Picture" class="h-20 w-20 rounded-full object-cover">
+                </div>
+            @endif
+            
+            <input type="file" id="profile_picture" name="profile_picture" class="mt-1 block w-full" />
+            <x-input-error class="mt-2" :messages="$errors->get('profile_picture')" />
         </div>
 
         <div class="flex items-center gap-4">

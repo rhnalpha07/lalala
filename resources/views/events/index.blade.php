@@ -19,7 +19,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @forelse ($events->where('event_date', '>=', now()) as $event)
                             <div class="group bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
-                                <a href="{{ route('events.show', $event) }}" class="block">
+                                <a href="{{ route('events.show', ['event' => $event->id]) }}" class="block">
                                     <div class="h-48 overflow-hidden">
                                         @if ($event->image)
                                             <img src="{{ Storage::url($event->image) }}" alt="{{ $event->name }}" 
@@ -88,7 +88,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @forelse ($events->where('event_date', '<', now()) as $event)
                             <div class="group bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow opacity-75">
-                                <a href="{{ route('events.show', $event) }}" class="block">
+                                <a href="{{ route('events.show', ['event' => $event->id]) }}" class="block">
                                     <div class="h-48 overflow-hidden grayscale">
                                         @if ($event->image)
                                             <img src="{{ Storage::url($event->image) }}" alt="{{ $event->name }}" 

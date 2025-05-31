@@ -26,33 +26,5 @@
                 {{ $slot }}
             </main>
         </div>
-
-        <!-- Alpine.js Countdown Script -->
-        <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('countdown', () => ({
-                    days: '00',
-                    hours: '00',
-                    minutes: '00',
-                    seconds: '00',
-                    init() {
-                        // Set the festival date (June 15, 2025)
-                        const festivalDate = new Date('June 15, 2025 00:00:00').getTime();
-                        
-                        setInterval(() => {
-                            const now = new Date().getTime();
-                            const distance = festivalDate - now;
-                            
-                            if (distance > 0) {
-                                this.days = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-                                this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-                                this.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-                                this.seconds = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
-                            }
-                        }, 1000);
-                    }
-                }));
-            });
-        </script>
     </body>
 </html>

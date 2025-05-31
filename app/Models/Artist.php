@@ -15,6 +15,9 @@ class Artist extends Model
         'bio',
         'image',
         'social_media',
+        'genre',
+        'gradient_start_color',
+        'gradient_end_color',
     ];
 
     public function events()

@@ -26,12 +26,23 @@ class ArtistController extends Controller
             'name' => 'required|string|max:255',
             'bio' => 'nullable|string',
             'genre' => 'nullable|string',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'nullable|image|max:2048',
+            'gradient_start_color' => 'nullable|string|max:7',
+            'gradient_end_color' => 'nullable|string|max:7',
         ]);
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('artists', 'public');
             $validated['image'] = $path;
+        }
+
+        // Set default gradient colors if not provided
+        if (empty($validated['gradient_start_color'])) {
+            $validated['gradient_start_color'] = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+        }
+        
+        if (empty($validated['gradient_end_color'])) {
+            $validated['gradient_end_color'] = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
         }
 
         Artist::create($validated);
@@ -51,7 +62,9 @@ class ArtistController extends Controller
             'name' => 'required|string|max:255',
             'bio' => 'nullable|string',
             'genre' => 'nullable|string',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'nullable|image|max:2048',
+            'gradient_start_color' => 'nullable|string|max:7',
+            'gradient_end_color' => 'nullable|string|max:7',
         ]);
 
         if ($request->hasFile('image')) {

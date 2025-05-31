@@ -30,6 +30,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/show', [ProfileController::class, 'show'])->name('profile.show');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
@@ -52,6 +53,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
     Route::get('/my-transactions', [TransactionController::class, 'userTransactions'])->name('transactions.user');
+    
+    // My Tickets feature - show tickets purchased by the logged-in user
+    Route::get('/my-tickets', [TicketController::class, 'userTickets'])->name('tickets.user');
     
     // Admin only routes
     Route::middleware(['admin'])->group(function () {
