@@ -1,4 +1,4 @@
-# 🌟 Welcome to Project Bujang! 🌟
+# 🌟 Welcome to Project soundwave fest! 🌟
 
 ## 🎉 Hey there, awesome human!
 
@@ -79,15 +79,5 @@ We love new friends! If you want to contribute:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request (and get virtual high-fives! 🙌)
 
-### 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details
-(boring but important stuff 📜)
-
-### 🎨 Made with Love By
-
-Your Awesome Team 💖
-
----
 
 _Remember: Code like nobody's watching, but comment as if everybody is! 💃🕺_
